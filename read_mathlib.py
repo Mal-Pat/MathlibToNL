@@ -4,9 +4,12 @@ file = 'Basic'
 
 f = f'{dir}/{subj}/{file}.lean'
 
-with open(f, 'r') as file2:
+section_keywords = ['variable']
+keywords = ['theorem', 'lemma']
+
+with open(f, 'r') as infile:
     v = 0
-    for line in file2:
+    for line in infile:
         if 'theorem' in line:
             if ':=' in line:
                 print(line)
@@ -21,3 +24,6 @@ with open(f, 'r') as file2:
                 continue
 
 dump = f'{subj}/{file}.jsonl'
+
+with open(dump, 'w') as outfile:
+    pass
