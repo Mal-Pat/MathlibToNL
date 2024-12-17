@@ -1,8 +1,6 @@
 import json
 import openai  
 
-
-
 input_file = "Topology/Basic.jsonl"
 output_file = "Topology/Basic_translations.jsonl"
 

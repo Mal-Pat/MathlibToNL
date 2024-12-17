@@ -1,36 +1,22 @@
-import openai
+from openai import OpenAI
 
-# Set your OpenAI API key
+client = OpenAI(api_key="")
 
 def translate_lean_code_to_text(lean_code: str):
-    try:
-        # Make the API call to OpenAI's ChatCompletion endpoint
-        response = openai.ChatCompletion.create(
-            model="gpt-4",  # or use "gpt-3.5-turbo" if you're using that model
-            messages=[
-                {"role": "system", "content": "You are a mathematical assistant."},
-                {"role": "user", "content": f"Translate the following Lean code: '{lean_code}'"}
-            ]
+    
+    response = client.chat.completions.create( 
+        model="gpt-4o", 
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that translates formal mathematical theorems in Lean 4 into natural language."},
+            {"role": "user", "content": f"Translate the following Lean 4 code into natural language. Give a clear and short answer in natural language: {lean_code}"}
+            ] 
         )
-        
-        # Extract and print the translated message
-        translated_text = response.choices[0].message['content']
-        print("Translation Output:", translated_text)
-        
-        # You can also write this output to a file if needed
-        with open("translation_output.txt", "w") as f:
-            f.write(translated_text)
 
-    except Exception as e:
-        print(f"Error during translation: {e}")
+    translated_text = response.choices[0].message.content
+    print("Translation Output:", translated_text)
 
-# Example Lean code (you can replace this with any Lean code)
-lean_code_example = """
-example : 2 + 2 = 4 :=
-begin
-  exact rfl, -- Proves that 2 + 2 = 4 using reflexivity
-end
-"""
 
-# Call the function to translate the Lean code
+
+lean_code_example = "theorem exists_forall_hasDerivWithinAt_Icc_eq :\n    ∀ {E : Type u_1} [inst : NormedAddCommGroup E] [inst_1 : NormedSpace ℝ E] [inst_2 : CompleteSpace E] {v : ℝ → E → E}\n      {tMin t₀ tMax : ℝ} (x₀ : E) {C R : ℝ} {L : NNReal},\n      IsPicardLindelof v tMin t₀ tMax x₀ L R C →\n        ∃ f, f t₀ = x₀ ∧ ∀ t ∈ Set.Icc tMin tMax, HasDerivWithinAt f (v t (f t)) (Set.Icc tMin tMax) t :=\n  by sorry"
+
 translate_lean_code_to_text(lean_code_example)
